@@ -19,7 +19,7 @@ public class Koneksi {
             return DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/Inventory",
                 "root",
-                "root"
+                "123456"
             );
         } catch (Exception e) {
             JOptionPane.showMessageDialog(
