@@ -17,6 +17,6 @@ public class Inventory {
             java.util.logging.Logger.getLogger(Inventory.class.getName())
                     .log(java.util.logging.Level.WARNING, "Nimbus look and feel gagal dipakai", ex);
         }
-        java.awt.EventQueue.invokeLater(() -> new MainFrame().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new LoginFrame().setVisible(true));
     }
 }

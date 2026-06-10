@@ -61,7 +61,8 @@ public class Barang {
         Connection sqlCon,
         int idKategori,
         String namaBarang,
-        int jumlahBarang
+        int jumlahBarang,
+        int idUser
     ) {
         PreparedStatement stmt = null;
         try {
@@ -79,6 +80,7 @@ public class Barang {
                     Transaksi.create(
                         sqlCon,
                         res.getInt(1),
+                        idUser,
                         "Masuk",
                         jumlahBarang,
                         "Barang baru ditambahkan."

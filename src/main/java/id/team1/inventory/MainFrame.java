@@ -29,7 +29,9 @@ public class MainFrame extends javax.swing.JFrame {
     private static final java.awt.Color DANGER_COLOR = new java.awt.Color(185, 28, 28);
     private static final java.awt.Color NEUTRAL_COLOR = NAVY_900;
     private static final java.awt.Color SEARCH_COLOR = BLUE_700;
+    private final AppUser loggedInUser;
     private final java.sql.Connection conn = Koneksi.createConnection();
+    private final javax.swing.JLabel lblUserInfo = new javax.swing.JLabel("User: -");
     private final javax.swing.JLabel lblKategoriInfo = new javax.swing.JLabel("Kategori: 0");
     private final javax.swing.JLabel lblBarangInfo = new javax.swing.JLabel("Barang: 0");
     private final javax.swing.JLabel lblTransaksiInfo = new javax.swing.JLabel("Transaksi: 0");
@@ -39,6 +41,11 @@ public class MainFrame extends javax.swing.JFrame {
      * Creates new form MainFrame
      */
     public MainFrame() {
+        this(AppUser.defaultAdmin());
+    }
+
+    public MainFrame(AppUser loggedInUser) {
+        this.loggedInUser = loggedInUser;
         initComponents();
         applyModernStyle();
         setupTableRenderers();
@@ -89,6 +96,7 @@ public class MainFrame extends javax.swing.JFrame {
         styleTable(tblBarang, jScrollPane2);
         styleTable(tblTransaksi, jScrollPane3);
         configureColumnWidths();
+        lblUserInfo.setText("User: " + loggedInUser.getDisplayName());
         rebuildMainLayout();
 
         pack();
@@ -261,6 +269,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         javax.swing.JPanel infoPanel = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 8, 4));
         infoPanel.setOpaque(false);
+        infoPanel.add(createInfoChip(lblUserInfo));
         infoPanel.add(createInfoChip(lblKategoriInfo));
         infoPanel.add(createInfoChip(lblBarangInfo));
         infoPanel.add(createInfoChip(lblTransaksiInfo));
@@ -299,7 +308,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void configureColumnWidths() {
         setColumnWidths(tblKategori, 70, 260);
         setColumnWidths(tblBarang, 70, 190, 170, 80);
-        setColumnWidths(tblTransaksi, 70, 150, 140, 90, 90, 180, 140);
+        setColumnWidths(tblTransaksi, 70, 145, 130, 80, 80, 165, 130, 130);
     }
 
     private void setColumnWidths(javax.swing.JTable table, int... widths) {
@@ -450,8 +459,23 @@ public class MainFrame extends javax.swing.JFrame {
             res.getString("TipeTransaksi"),
             res.getInt("JumlahTransaksi"),
             res.getString("Pesan"),
+            formatUser(res),
             formatTimestamp(res.getTimestamp("Timestamp"))
         });
+    }
+
+    private String formatUser(java.sql.ResultSet res) throws java.sql.SQLException {
+        String namaLengkap = res.getString("NamaLengkap");
+        if (namaLengkap != null && !namaLengkap.isBlank()) {
+            return namaLengkap;
+        }
+
+        String username = res.getString("Username");
+        if (username != null && !username.isBlank()) {
+            return username;
+        }
+
+        return "-";
     }
 
     private String formatTimestamp(java.sql.Timestamp timestamp) {
@@ -642,7 +666,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         tblBarang.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblKategoriMouseClicked(evt);
+                tblBarangMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(tblBarang);
@@ -743,20 +767,15 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Barang", "Kategori", "Tipe", "Jumlah", "Pesan", "Waktu"
+                "ID", "Barang", "Kategori", "Tipe", "Jumlah", "Pesan", "User", "Waktu"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
-            }
-        });
-        tblTransaksi.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblKategoriMouseClicked(evt);
             }
         });
         jScrollPane3.setViewportView(tblTransaksi);
@@ -1029,7 +1048,7 @@ public class MainFrame extends javax.swing.JFrame {
                     return;
                 }
 
-                Barang.create(conn, idKategori, namaBarang, stokAwal);
+                Barang.create(conn, idKategori, namaBarang, stokAwal, loggedInUser.getIdUser());
                 txtNamaBarang.setText("");
                 txtStokBarang.setText("");
                 loadBarang();
@@ -1188,7 +1207,7 @@ public class MainFrame extends javax.swing.JFrame {
                 }
 
                 String pesan = txtPesanTransaksi.getText().trim();
-                Transaksi.create(conn, idBarang, tipe, jumlah, pesan);
+                Transaksi.create(conn, idBarang, loggedInUser.getIdUser(), tipe, jumlah, pesan);
                 txtJumlahTransaksi.setText("");
                 txtPesanTransaksi.setText("");
                 loadTransaksi();
@@ -1220,21 +1239,25 @@ public class MainFrame extends javax.swing.JFrame {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblTransaksi.getModel();
         model.setRowCount(0);
 
-        String sql = "SELECT * FROM Transaksi "
+        String sql = "SELECT Transaksi.*, Barang.NamaBarang, Kategori.NamaKategori, Users.Username, Users.NamaLengkap "
+                + "FROM Transaksi "
                 + "LEFT OUTER JOIN Barang USING (IdBarang) "
                 + "LEFT OUTER JOIN Kategori USING (IdKategori) "
+                + "LEFT OUTER JOIN Users USING (IdUser) "
                 + "WHERE CAST(IdTransaksi AS CHAR) LIKE ? "
                 + "OR NamaBarang LIKE ? "
                 + "OR NamaKategori LIKE ? "
                 + "OR TipeTransaksi LIKE ? "
                 + "OR Pesan LIKE ? "
+                + "OR Username LIKE ? "
+                + "OR NamaLengkap LIKE ? "
                 + "ORDER BY Timestamp DESC";
 
         try {
             if (conn != null) {
                 try (java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
                     String keyword = Koneksi.prepareLike(query);
-                    for (int i = 1; i <= 5; i++) {
+                    for (int i = 1; i <= 7; i++) {
                         stmt.setString(i, keyword);
                     }
                     try (java.sql.ResultSet res = stmt.executeQuery()) {

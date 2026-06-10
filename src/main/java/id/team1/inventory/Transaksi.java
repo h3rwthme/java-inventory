@@ -22,7 +22,12 @@ public class Transaksi {
         PreparedStatement stmt = null;
         try {
             stmt = sqlCon.prepareStatement(
-                "SELECT * FROM Transaksi LEFT OUTER JOIN Barang USING (IdBarang) LEFT OUTER JOIN Kategori USING (IdKategori) ORDER BY Timestamp DESC"
+                "SELECT Transaksi.*, Barang.NamaBarang, Kategori.NamaKategori, Users.Username, Users.NamaLengkap "
+                + "FROM Transaksi "
+                + "LEFT OUTER JOIN Barang USING (IdBarang) "
+                + "LEFT OUTER JOIN Kategori USING (IdKategori) "
+                + "LEFT OUTER JOIN Users USING (IdUser) "
+                + "ORDER BY Timestamp DESC"
             );
             ResultSet res = stmt.executeQuery();
             return res;
@@ -39,7 +44,13 @@ public class Transaksi {
         PreparedStatement stmt = null;
         try {
             stmt = sqlCon.prepareStatement(
-                "SELECT * FROM Transaksi LEFT OUTER JOIN Barang USING (IdBarang) LEFT OUTER JOIN Kategori USING (IdKategori) WHERE IdTransaksi=? ORDER BY Timestamp DESC"
+                "SELECT Transaksi.*, Barang.NamaBarang, Kategori.NamaKategori, Users.Username, Users.NamaLengkap "
+                + "FROM Transaksi "
+                + "LEFT OUTER JOIN Barang USING (IdBarang) "
+                + "LEFT OUTER JOIN Kategori USING (IdKategori) "
+                + "LEFT OUTER JOIN Users USING (IdUser) "
+                + "WHERE IdTransaksi=? "
+                + "ORDER BY Timestamp DESC"
             );
             stmt.setInt(1, idTransaksi);
             ResultSet res = stmt.executeQuery();
@@ -56,6 +67,7 @@ public class Transaksi {
     public static void create(
         Connection sqlCon,
         int idBarang,
+        int idUser,
         String tipeTransaksi,
         int jumlahTransaksi,
         String pesan
@@ -63,12 +75,13 @@ public class Transaksi {
         PreparedStatement stmt = null;
         try {
             stmt = sqlCon.prepareStatement(
-                "INSERT INTO Transaksi (IdBarang, TipeTransaksi, JumlahTransaksi, Pesan) VALUES (?, ?, ?, ?)"
+                "INSERT INTO Transaksi (IdBarang, IdUser, TipeTransaksi, JumlahTransaksi, Pesan) VALUES (?, ?, ?, ?, ?)"
             );
             stmt.setInt(1, idBarang);
-            stmt.setString(2, tipeTransaksi);
-            stmt.setInt(3, jumlahTransaksi);
-            stmt.setString(4, pesan);
+            stmt.setInt(2, idUser);
+            stmt.setString(3, tipeTransaksi);
+            stmt.setInt(4, jumlahTransaksi);
+            stmt.setString(5, pesan);
             stmt.execute();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(

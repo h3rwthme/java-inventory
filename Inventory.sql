@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS Transaksi;
 DROP TABLE IF EXISTS Barang;
 DROP TABLE IF EXISTS Kategori;
+DROP TABLE IF EXISTS Users;
 
 SET GLOBAL time_zone = '+07:00';
 
@@ -17,14 +18,26 @@ CREATE TABLE `Barang` (
   FOREIGN KEY (`IdKategori`) REFERENCES `Kategori` (`IdKategori`) ON DELETE CASCADE
 );
 
+CREATE TABLE `Users` (
+  `IdUser` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `Username` varchar(50) NOT NULL UNIQUE,
+  `Password` varchar(100) NOT NULL,
+  `NamaLengkap` varchar(100) NOT NULL
+);
+
+INSERT INTO `Users` (`Username`, `Password`, `NamaLengkap`) VALUES
+('admin', 'admin123', 'Administrator');
+
 CREATE TABLE `Transaksi` (
   `IdTransaksi` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `IdBarang` int(11) NOT NULL,
+  `IdUser` int(11) NOT NULL,
   `TipeTransaksi` enum('Masuk','Keluar') NOT NULL,
   `JumlahTransaksi` int(11) NOT NULL,
   `Pesan` varchar(50) NOT NULL,
   `Timestamp` timestamp NOT NULL DEFAULT current_timestamp,
-  FOREIGN KEY (`IdBarang`) REFERENCES `Barang` (`IdBarang`) ON DELETE CASCADE
+  FOREIGN KEY (`IdBarang`) REFERENCES `Barang` (`IdBarang`) ON DELETE CASCADE,
+  FOREIGN KEY (`IdUser`) REFERENCES `Users` (`IdUser`) ON DELETE RESTRICT
 );
 
 
