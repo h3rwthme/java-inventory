@@ -11,31 +11,27 @@ package id.team1.inventory;
 public class MainFrame extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
-    private static final java.awt.Color NAVY_950 = new java.awt.Color(8, 27, 58);
-    private static final java.awt.Color NAVY_900 = new java.awt.Color(15, 45, 88);
-    private static final java.awt.Color BLUE_800 = new java.awt.Color(30, 64, 175);
+    private static final java.awt.Color NAVY_950 = new java.awt.Color(15, 23, 42);
+    private static final java.awt.Color NAVY_900 = new java.awt.Color(30, 64, 175);
+    private static final java.awt.Color BLUE_800 = new java.awt.Color(59, 130, 246);
     private static final java.awt.Color BLUE_700 = new java.awt.Color(29, 78, 216);
-    private static final java.awt.Color BLUE_500 = new java.awt.Color(59, 130, 246);
+    private static final java.awt.Color BLUE_500 = new java.awt.Color(88, 166, 255);
     private static final java.awt.Color BLUE_200 = new java.awt.Color(191, 219, 254);
     private static final java.awt.Color BLUE_100 = new java.awt.Color(219, 234, 254);
     private static final java.awt.Color BLUE_50 = new java.awt.Color(239, 246, 255);
-    private static final java.awt.Color BACKGROUND_COLOR = BLUE_50;
-    private static final java.awt.Color SURFACE_COLOR = java.awt.Color.WHITE;
-    private static final java.awt.Color TEXT_COLOR = NAVY_950;
+    private static final java.awt.Color BACKGROUND_COLOR = new java.awt.Color(248, 250, 252);
+    private static final java.awt.Color SURFACE_COLOR = new java.awt.Color(255, 255, 255);
+    private static final java.awt.Color TEXT_COLOR = new java.awt.Color(30, 41, 59);
     private static final java.awt.Color MUTED_TEXT_COLOR = new java.awt.Color(100, 116, 139);
-    private static final java.awt.Color BORDER_COLOR = BLUE_200;
-    private static final java.awt.Color PRIMARY_COLOR = BLUE_800;
-    private static final java.awt.Color EDIT_COLOR = BLUE_500;
-    private static final java.awt.Color DANGER_COLOR = new java.awt.Color(185, 28, 28);
-    private static final java.awt.Color NEUTRAL_COLOR = NAVY_900;
-    private static final java.awt.Color SEARCH_COLOR = BLUE_700;
+    private static final java.awt.Color BORDER_COLOR = new java.awt.Color(203, 213, 225);
+    private static final java.awt.Color PRIMARY_COLOR = new java.awt.Color(59, 130, 246);
+    private static final java.awt.Color EDIT_COLOR = new java.awt.Color(99, 102, 241);
+    private static final java.awt.Color DANGER_COLOR = new java.awt.Color(239, 68, 68);
+    private static final java.awt.Color NEUTRAL_COLOR = new java.awt.Color(107, 114, 128);
+    private static final java.awt.Color SEARCH_COLOR = new java.awt.Color(29, 78, 216);
     private final AppUser loggedInUser;
     private final java.sql.Connection conn = Koneksi.createConnection();
     private final javax.swing.JLabel lblUserInfo = new javax.swing.JLabel("User: -");
-    private final javax.swing.JLabel lblKategoriInfo = new javax.swing.JLabel("Kategori: 0");
-    private final javax.swing.JLabel lblBarangInfo = new javax.swing.JLabel("Barang: 0");
-    private final javax.swing.JLabel lblTransaksiInfo = new javax.swing.JLabel("Transaksi: 0");
-    private final javax.swing.JLabel lblFooterStatus = new javax.swing.JLabel("Siap digunakan");
 
     /**
      * Creates new form MainFrame
@@ -56,14 +52,17 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void applyModernStyle() {
-        setTitle("Sistem Inventory Barang");
-        setMinimumSize(new java.awt.Dimension(880, 620));
+        setTitle("Inventory System");
+        setMinimumSize(new java.awt.Dimension(1100, 700));
         getContentPane().setBackground(BACKGROUND_COLOR);
 
-        jTabbedPane1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        jTabbedPane1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
         jTabbedPane1.setBackground(BACKGROUND_COLOR);
         jTabbedPane1.setForeground(TEXT_COLOR);
-        jTabbedPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(14, 18, 18, 18));
+        jTabbedPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 14, 14, 14));
+        jTabbedPane1.setTitleAt(0, "📂  Kategori");
+        jTabbedPane1.setTitleAt(1, "📦  Barang");
+        jTabbedPane1.setTitleAt(2, "📋  Transaksi");
         jTabbedPane1.setToolTipTextAt(0, "Data kategori barang");
         jTabbedPane1.setToolTipTextAt(1, "Data barang dan stok");
         jTabbedPane1.setToolTipTextAt(2, "Riwayat transaksi stok");
@@ -96,7 +95,7 @@ public class MainFrame extends javax.swing.JFrame {
         styleTable(tblBarang, jScrollPane2);
         styleTable(tblTransaksi, jScrollPane3);
         configureColumnWidths();
-        lblUserInfo.setText("User: " + loggedInUser.getDisplayName());
+        lblUserInfo.setText(loggedInUser.getDisplayName());
         rebuildMainLayout();
 
         pack();
@@ -164,29 +163,54 @@ public class MainFrame extends javax.swing.JFrame {
         button.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         button.setBorder(javax.swing.BorderFactory.createCompoundBorder(
                 new javax.swing.border.LineBorder(background.darker(), 1, true),
-                javax.swing.BorderFactory.createEmptyBorder(8, 14, 8, 14)
+                javax.swing.BorderFactory.createEmptyBorder(9, 16, 9, 16)
         ));
         button.setOpaque(true);
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            java.awt.Color original = background;
+            @Override public void mouseEntered(java.awt.event.MouseEvent e) {
+                button.setBackground(original.brighter());
+            }
+            @Override public void mouseExited(java.awt.event.MouseEvent e) {
+                button.setBackground(original);
+            }
+        });
     }
 
     private void styleTable(javax.swing.JTable table, javax.swing.JScrollPane scrollPane) {
         table.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
         table.setForeground(TEXT_COLOR);
         table.setBackground(SURFACE_COLOR);
-        table.setRowHeight(34);
+        table.setRowHeight(38);
         table.setIntercellSpacing(new java.awt.Dimension(0, 1));
-        table.setGridColor(BLUE_100);
+        table.setGridColor(new java.awt.Color(226, 232, 240));
         table.setShowVerticalLines(false);
         table.setShowHorizontalLines(true);
         table.setSelectionBackground(BLUE_100);
         table.setSelectionForeground(NAVY_950);
         table.setAutoCreateRowSorter(true);
 
-        table.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
-        table.getTableHeader().setBackground(NAVY_900);
-        table.getTableHeader().setForeground(java.awt.Color.WHITE);
-        table.getTableHeader().setReorderingAllowed(false);
-        table.getTableHeader().setPreferredSize(new java.awt.Dimension(table.getTableHeader().getWidth(), 38));
+        javax.swing.table.JTableHeader header = table.getTableHeader();
+        header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+        header.setBackground(new java.awt.Color(241, 245, 249));
+        header.setForeground(new java.awt.Color(51, 65, 85));
+        header.setReorderingAllowed(false);
+        header.setPreferredSize(new java.awt.Dimension(header.getWidth(), 42));
+        header.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(59, 130, 246)));
+        header.setDefaultRenderer(new javax.swing.table.DefaultTableCellRenderer() {
+            @Override
+            public java.awt.Component getTableCellRendererComponent(javax.swing.JTable t, Object val, boolean sel, boolean foc, int r, int c) {
+                javax.swing.JLabel lbl = (javax.swing.JLabel) super.getTableCellRendererComponent(t, val, sel, foc, r, c);
+                lbl.setBackground(new java.awt.Color(241, 245, 249));
+                lbl.setForeground(new java.awt.Color(51, 65, 85));
+                lbl.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+                lbl.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                    javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(59, 130, 246)),
+                    javax.swing.BorderFactory.createEmptyBorder(4, 12, 4, 12)));
+                lbl.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+                return lbl;
+            }
+        });
 
         table.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
             @Override
@@ -195,14 +219,14 @@ public class MainFrame extends javax.swing.JFrame {
                 c.setForeground(isSelected ? table.getSelectionForeground() : TEXT_COLOR);
                 c.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? SURFACE_COLOR : BLUE_50));
                 if (c instanceof javax.swing.JLabel label) {
-                    label.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 10));
+                    label.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 12, 0, 12));
                 }
                 return c;
             }
         });
 
         scrollPane.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createLineBorder(BORDER_COLOR),
+                javax.swing.BorderFactory.createLineBorder(new java.awt.Color(226, 232, 240)),
                 javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0)
         ));
         scrollPane.getViewport().setBackground(SURFACE_COLOR);
@@ -237,7 +261,6 @@ public class MainFrame extends javax.swing.JFrame {
         rootPanel.setBackground(BACKGROUND_COLOR);
         rootPanel.add(createHeaderPanel(), java.awt.BorderLayout.NORTH);
         rootPanel.add(jTabbedPane1, java.awt.BorderLayout.CENTER);
-        rootPanel.add(createFooterPanel(), java.awt.BorderLayout.SOUTH);
 
         getContentPane().removeAll();
         getContentPane().setLayout(new java.awt.BorderLayout());
@@ -247,60 +270,104 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private javax.swing.JPanel createHeaderPanel() {
-        javax.swing.JPanel headerPanel = new javax.swing.JPanel(new java.awt.BorderLayout(16, 0));
-        headerPanel.setBackground(NAVY_950);
-        headerPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(18, 24, 18, 24));
+        javax.swing.JPanel headerPanel = new javax.swing.JPanel(new java.awt.BorderLayout(16, 0)) {
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                // White header with subtle bottom blue line
+                g2.setColor(new java.awt.Color(255, 255, 255));
+                g2.fillRect(0, 0, getWidth(), getHeight());
+                // Bottom accent line
+                java.awt.GradientPaint line = new java.awt.GradientPaint(0, 0, new java.awt.Color(59, 130, 246), getWidth(), 0, new java.awt.Color(99, 102, 241));
+                g2.setPaint(line);
+                g2.fillRect(0, getHeight() - 3, getWidth(), 3);
+                g2.dispose();
+            }
+        };
+        headerPanel.setOpaque(false);
+        headerPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(12, 24, 12, 24));
 
         javax.swing.JPanel titlePanel = new javax.swing.JPanel();
         titlePanel.setOpaque(false);
         titlePanel.setLayout(new javax.swing.BoxLayout(titlePanel, javax.swing.BoxLayout.Y_AXIS));
 
-        javax.swing.JLabel titleLabel = new javax.swing.JLabel("Sistem Inventory Barang");
+        javax.swing.JLabel titleLabel = new javax.swing.JLabel("📦 Inventory System");
         titleLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 22));
-        titleLabel.setForeground(java.awt.Color.WHITE);
+        titleLabel.setForeground(new java.awt.Color(30, 58, 138));
 
-        javax.swing.JLabel subtitleLabel = new javax.swing.JLabel("Dashboard Operasional");
+        javax.swing.JLabel subtitleLabel = new javax.swing.JLabel("Manajemen Stok & Transaksi");
         subtitleLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12));
-        subtitleLabel.setForeground(BLUE_100);
+        subtitleLabel.setForeground(new java.awt.Color(100, 116, 139));
 
         titlePanel.add(titleLabel);
-        titlePanel.add(javax.swing.Box.createVerticalStrut(3));
+        titlePanel.add(javax.swing.Box.createVerticalStrut(2));
         titlePanel.add(subtitleLabel);
 
         javax.swing.JPanel infoPanel = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 8, 4));
         infoPanel.setOpaque(false);
-        infoPanel.add(createInfoChip(lblUserInfo));
-        infoPanel.add(createInfoChip(lblKategoriInfo));
-        infoPanel.add(createInfoChip(lblBarangInfo));
-        infoPanel.add(createInfoChip(lblTransaksiInfo));
+
+        // User chip with avatar icon
+        javax.swing.JLabel userChip = new javax.swing.JLabel("👤 " + loggedInUser.getDisplayName());
+        userChip.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
+        userChip.setForeground(new java.awt.Color(59, 130, 246));
+        userChip.setBackground(new java.awt.Color(239, 246, 255));
+        userChip.setOpaque(true);
+        userChip.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                new javax.swing.border.LineBorder(new java.awt.Color(191, 219, 254), 1, true),
+                javax.swing.BorderFactory.createEmptyBorder(6, 14, 6, 14)
+        ));
+        infoPanel.add(userChip);
+
+        javax.swing.JButton logoutBtn = new javax.swing.JButton("Logout");
+        logoutBtn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
+        logoutBtn.setForeground(new java.awt.Color(220, 38, 38));
+        logoutBtn.setBackground(new java.awt.Color(254, 242, 242));
+        logoutBtn.setFocusPainted(false);
+        logoutBtn.setContentAreaFilled(true);
+        logoutBtn.setOpaque(true);
+        logoutBtn.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                new javax.swing.border.LineBorder(new java.awt.Color(252, 165, 165), 1, true),
+                javax.swing.BorderFactory.createEmptyBorder(6, 16, 6, 16)
+        ));
+        logoutBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        logoutBtn.addActionListener(e -> handleLogout());
+        logoutBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override public void mouseEntered(java.awt.event.MouseEvent e) {
+                logoutBtn.setBackground(new java.awt.Color(254, 226, 226));
+            }
+            @Override public void mouseExited(java.awt.event.MouseEvent e) {
+                logoutBtn.setBackground(new java.awt.Color(254, 242, 242));
+            }
+        });
+        infoPanel.add(logoutBtn);
 
         headerPanel.add(titlePanel, java.awt.BorderLayout.WEST);
         headerPanel.add(infoPanel, java.awt.BorderLayout.EAST);
         return headerPanel;
     }
 
-    private javax.swing.JPanel createFooterPanel() {
-        javax.swing.JPanel footerPanel = new javax.swing.JPanel(new java.awt.BorderLayout());
-        footerPanel.setBackground(SURFACE_COLOR);
-        footerPanel.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, BORDER_COLOR),
-                javax.swing.BorderFactory.createEmptyBorder(10, 24, 10, 24)
-        ));
-
-        lblFooterStatus.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
-        lblFooterStatus.setForeground(MUTED_TEXT_COLOR);
-        footerPanel.add(lblFooterStatus, java.awt.BorderLayout.WEST);
-        return footerPanel;
+    private void handleLogout() {
+        int option = javax.swing.JOptionPane.showConfirmDialog(
+            this,
+            "Apakah Anda yakin ingin logout?",
+            "Konfirmasi Logout",
+            javax.swing.JOptionPane.YES_NO_OPTION
+        );
+        if (option == javax.swing.JOptionPane.YES_OPTION) {
+            this.dispose();
+            new LoginFrame().setVisible(true);
+        }
     }
 
     private javax.swing.JLabel createInfoChip(javax.swing.JLabel label) {
-        label.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
-        label.setForeground(NAVY_950);
-        label.setBackground(BLUE_50);
+        label.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 11));
+        label.setForeground(new java.awt.Color(255, 255, 255));
+        label.setBackground(new java.awt.Color(30, 64, 175));
         label.setOpaque(true);
         label.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                new javax.swing.border.LineBorder(BLUE_200, 1, true),
-                javax.swing.BorderFactory.createEmptyBorder(6, 10, 6, 10)
+                new javax.swing.border.LineBorder(new java.awt.Color(29, 78, 216), 1, true),
+                javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
         return label;
     }
@@ -323,10 +390,8 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void updateSummaryStatus(String message) {
-        lblKategoriInfo.setText("Kategori: " + tblKategori.getRowCount());
-        lblBarangInfo.setText("Barang: " + tblBarang.getRowCount());
-        lblTransaksiInfo.setText("Transaksi: " + tblTransaksi.getRowCount());
-        lblFooterStatus.setText(message);
+        // Status bar removed, but we keep this for logging purposes
+        logger.info(message);
     }
 
     private void setupTableRenderers() {
@@ -613,7 +678,7 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addGroup(panelKategoriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnResetKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btnEditKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(215, Short.MAX_VALUE))
         );
         panelKategoriLayout.setVerticalGroup(
             panelKategoriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -703,8 +768,8 @@ public class MainFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCariBarang))
                     .addGroup(panelBarangLayout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 692, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelBarangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel4)
                             .addComponent(txtNamaBarang)
@@ -720,7 +785,7 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(cmbKategoriBarang, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel6)
                             .addComponent(txtStokBarang))))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelBarangLayout.setVerticalGroup(
             panelBarangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -810,8 +875,8 @@ public class MainFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCariTransaksi))
                     .addGroup(panelTransaksiLayout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 602, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelTransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel8)
                             .addGroup(panelTransaksiLayout.createSequentialGroup()
@@ -825,7 +890,7 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(jLabel11)
                             .addComponent(txtPesanTransaksi)
                             .addComponent(cmbTipeTransaksi, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
         panelTransaksiLayout.setVerticalGroup(
             panelTransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -869,8 +934,8 @@ public class MainFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 694, Short.MAX_VALUE)
-                .addGap(15, 15, 15))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 897, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -947,6 +1012,7 @@ public class MainFrame extends javax.swing.JFrame {
         int selectedRow = tblKategori.getSelectedRow();
         if (selectedRow != -1) {
             txtNamaKategori.setText(tblKategori.getValueAt(selectedRow, 1).toString());
+            btnSimpanKategori.setEnabled(false);
         }
     }//GEN-LAST:event_tblKategoriMouseClicked
 
@@ -974,6 +1040,8 @@ public class MainFrame extends javax.swing.JFrame {
     private void btnResetKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetKategoriActionPerformed
         txtCariKategori.setText("");
         txtNamaKategori.setText("");
+        btnSimpanKategori.setEnabled(true);
+        tblKategori.clearSelection();
         loadKategori();
     }//GEN-LAST:event_btnResetKategoriActionPerformed
 
@@ -1095,6 +1163,7 @@ public class MainFrame extends javax.swing.JFrame {
             // Stok awal tidak diubah saat update barang karena update stok lewat transaksi
             txtStokBarang.setText(tblBarang.getValueAt(selectedRow, 3).toString());
             txtStokBarang.setEnabled(false); // disable edit stok
+            btnSimpanBarang.setEnabled(false); // disable simpan, force user to use Edit button
         }
     }//GEN-LAST:event_tblBarangMouseClicked
 
@@ -1153,6 +1222,9 @@ public class MainFrame extends javax.swing.JFrame {
         txtNamaBarang.setText("");
         txtStokBarang.setText("");
         txtStokBarang.setEnabled(true);
+        btnSimpanBarang.setEnabled(true);
+        btnSimpanBarang.setText("Simpan");
+        tblBarang.clearSelection();
         if (cmbKategoriBarang.getItemCount() > 0) {
             cmbKategoriBarang.setSelectedIndex(0);
         }

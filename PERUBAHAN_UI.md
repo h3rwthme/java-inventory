@@ -1,87 +1,161 @@
-# Perubahan UI Inventory
+# 📦 Inventory System — Dokumentasi Perubahan UI/UX
 
-File ini merangkum tambahan yang dibuat untuk memperbagus tampilan dan pengalaman pakai aplikasi inventory.
+> **Versi:** 2.0 — Redesign Profesional  
+> **Tanggal:** 16 Juni 2026  
+> **Tim:** Team 1
 
-## Palet Warna Profesional
+---
 
-Palet utama dibuat dari biru tua sampai biru muda:
+## 🎯 Ringkasan Perubahan
 
-| Nama Constant | HEX | RGB | Dipakai Untuk |
-| --- | --- | --- | --- |
-| `NAVY_950` | `#081B3A` | `8, 27, 58` | Header utama dan warna teks utama |
-| `NAVY_900` | `#0F2D58` | `15, 45, 88` | Tombol reset dan header tabel |
-| `BLUE_800` | `#1E40AF` | `30, 64, 175` | Tombol utama / simpan |
-| `BLUE_700` | `#1D4ED8` | `29, 78, 216` | Tombol cari |
-| `BLUE_500` | `#3B82F6` | `59, 130, 246` | Tombol edit |
-| `BLUE_200` | `#BFDBFE` | `191, 219, 254` | Border input, combo box, chip, dan panel |
-| `BLUE_100` | `#DBEAFE` | `219, 234, 254` | Seleksi tabel dan subtitle header |
-| `BLUE_50` | `#EFF6FF` | `239, 246, 255` | Background aplikasi dan zebra row |
+Redesign total UI/UX aplikasi dari tampilan standar menjadi **premium, modern, dan client-ready**. Fokus utama pada pengalaman pengguna yang bersih, profesional, dan mudah digunakan.
 
-Catatan: `DANGER_COLOR` tetap merah `#B91C1C` khusus tombol hapus dan stok rendah supaya aksi berbahaya tetap kebaca jelas.
+---
 
-## File yang Diubah
+## 🔐 Halaman Login — Redesign Total
 
-- `src/main/java/id/team1/inventory/Inventory.java`
-  - Menambahkan Nimbus Look and Feel supaya komponen Swing tampil lebih modern.
-  - Menambahkan fallback logging kalau Nimbus gagal dipakai.
+### Layout Baru: Split Panel
+| Sebelum | Sesudah |
+|---------|---------|
+| Form login sederhana di tengah | **Split panel** — ilustrasi kiri + form kanan |
+| Tidak ada visual branding | Ilustrasi warehouse profesional dengan branding |
+| Tampilan plain/kosong | Layout premium seperti SaaS modern |
 
-- `src/main/java/id/team1/inventory/MainFrame.java`
-  - Menambahkan tema warna terpusat untuk background, teks, border, dan tombol.
-  - Menambahkan header aplikasi dengan judul dan ringkasan jumlah data.
-  - Menambahkan footer status untuk menampilkan kondisi load dan hasil pencarian.
-  - Merapikan font, warna, ukuran input, combo box, tombol, tab, tabel, dan scroll pane.
-  - Menambahkan focus border pada text field agar input yang aktif lebih jelas.
-  - Menambahkan tooltip pada input, tab, dan tombol utama.
-  - Menambahkan pengaturan lebar kolom tabel agar data lebih mudah dibaca.
-  - Menambahkan zebra row dan highlight stok rendah yang lebih halus.
-  - Memformat waktu transaksi menjadi `dd/MM/yyyy HH:mm`.
-  - Mengaktifkan tombol `Cari` di tab Transaksi dengan pencarian berdasarkan ID, barang, kategori, tipe, atau pesan.
+### Fitur Baru Login
+- **Ilustrasi visual** — Gambar inventory/warehouse di panel kiri
+- **Branding** — Nama sistem + tagline di panel ilustrasi
+- **Placeholder text** — Input menampilkan hint saat kosong
+- **Focus glow effect** — Input field bercahaya biru saat aktif
+- **Gradient button** — Tombol Sign In dengan efek gradient + hover
+- **Decorative elements** — Lingkaran dekoratif di background
+- **Logo emoji** — Ikon 📦 sebagai logo visual
 
-## Kode yang Ditambahkan
+### Warna Login
+| Elemen | Warna |
+|--------|-------|
+| Background | `#FFFFFF` Putih bersih |
+| Panel ilustrasi | Gradasi `#EFF6FF` → `#DBEAFE` (biru muda) |
+| Input border | `#D1D5DB` (abu terang) |
+| Input focus | `#3B82F6` (biru aksen) |
+| Tombol | Gradasi `#3B82F6` → `#6366F1` |
+| Teks utama | `#111827` (hitam lembut) |
 
-- `Inventory.java`
-  - `javax.swing.UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");`
-  - `try-catch` untuk fallback logging kalau Nimbus gagal dipakai.
+---
 
-- `MainFrame.java`
-  - Constant palet warna: `NAVY_950`, `NAVY_900`, `BLUE_800`, `BLUE_700`, `BLUE_500`, `BLUE_200`, `BLUE_100`, `BLUE_50`, `BACKGROUND_COLOR`, `SURFACE_COLOR`, `TEXT_COLOR`, `MUTED_TEXT_COLOR`, `BORDER_COLOR`, `PRIMARY_COLOR`, `EDIT_COLOR`, `DANGER_COLOR`, `NEUTRAL_COLOR`, `SEARCH_COLOR`.
-  - Label status baru: `lblKategoriInfo`, `lblBarangInfo`, `lblTransaksiInfo`, `lblFooterStatus`.
-  - Method styling: `applyModernStyle()`, `stylePanels()`, `styleLabels()`, `styleFields()`, `styleCombos()`, `styleButton()`, `styleTable()`, `applyInputBorder()`, `styleTooltips()`.
-  - Method layout tambahan: `rebuildMainLayout()`, `createHeaderPanel()`, `createFooterPanel()`, `createInfoChip()`.
-  - Method tabel/status: `configureColumnWidths()`, `setColumnWidths()`, `updateSummaryStatus()`.
-  - Method transaksi: `addTransaksiRow()`, `formatTimestamp()`, `btnCariTransaksiActionPerformed()`.
-  - Action listener baru: `btnCariTransaksi.addActionListener(this::btnCariTransaksiActionPerformed);`.
+## 📊 Dashboard Inventory — Perubahan Besar
 
-## Kode yang Dihapus atau Diubah
+### Header Baru
+| Sebelum | Sesudah |
+|---------|---------|
+| Header biru gelap solid | **Header putih** dengan garis aksen biru di bawah |
+| Teks putih di background gelap | Teks biru navy di background putih |
+| Tanpa subtitle | Subtitle "Manajemen Stok & Transaksi" |
+| Chip user gelap | **Chip user** warna biru muda `#EFF6FF` |
+| Tombol logout merah solid | Tombol logout **outline merah muda** (lebih soft) |
 
-- Tidak ada file yang dihapus.
-- Warna lama yang campur biru, hijau, ungu, dan abu diganti menjadi palet biru profesional.
-- `SUCCESS_COLOR` hijau diganti konsepnya menjadi `EDIT_COLOR` biru muda untuk tombol edit.
-- Header tabel yang sebelumnya memakai warna hardcoded diganti memakai `NAVY_900`.
-- Background aplikasi dan zebra row diganti ke `BLUE_50`.
-- Border input yang sebelumnya abu-abu diganti ke `BLUE_200`.
-- Highlight seleksi tabel diganti ke `BLUE_100`.
-- Tampilan stok rendah di tabel barang diubah dari merah terang penuh menjadi merah muda halus dengan teks merah gelap.
-- Kolom waktu transaksi diubah dari `Timestamp` mentah menjadi format `dd/MM/yyyy HH:mm`.
-- Tombol `Cari` di tab Transaksi yang sebelumnya belum punya action sekarang aktif dan mencari ke beberapa kolom.
+### Tab Navigation
+- Setiap tab kini memiliki **ikon emoji**:
+  - 📂 Kategori
+  - 📦 Barang
+  - 📋 Transaksi
 
-## Catatan Implementasi
+### Tabel Data
+| Sebelum | Sesudah |
+|---------|---------|
+| Header tabel biru gelap/navy | **Header abu-abu terang** `#F1F5F9` |
+| Teks header putih | Teks header **slate gelap** `#334155` |
+| Tanpa bottom accent | **Garis biru** 2px di bawah header |
+| Row height 34px | Row height **38px** (lebih lapang) |
+| Grid color biru | Grid **abu-abu halus** `#E2E8F0` |
+| Cell padding 10px | Cell padding **12px** |
 
-- Blok `initComponents()` dari GUI Builder tidak diubah langsung.
-- Layout utama dibungkus ulang lewat `rebuildMainLayout()` agar header dan footer bisa ditambahkan tanpa merusak form bawaan NetBeans.
-- Status ringkasan di header diperbarui setiap data kategori, barang, atau transaksi dimuat ulang.
+### User Info
+- Chip user menampilkan **👤 + Nama** dengan background biru muda
+- Tombol logout menggunakan **warna merah muda** (bukan merah solid)
+- Hover effect yang smooth dan subtle
 
-## Verifikasi
+---
 
-Kalau Maven tersedia, jalankan compile dari folder project:
+## 🐛 Bug Fixes
 
-```bash
-mvn -q -DskipTests compile
+### 1. Tombol Simpan Tidak Aktif Setelah Reset (Barang)
+- **Masalah:** Setelah klik baris tabel, `btnSimpanBarang` di-disable. Klik "Reset" tidak mengaktifkan kembali.
+- **Solusi:** `btnResetBarang` sekarang memanggil `btnSimpanBarang.setEnabled(true)` + `tblBarang.clearSelection()`
+
+### 2. Tombol Simpan Tidak Aktif Setelah Reset (Kategori)
+- **Masalah:** Sama seperti barang, tombol simpan kategori tetap disabled setelah reset.
+- **Solusi:** `btnResetKategori` sekarang memanggil `tblKategori.clearSelection()` untuk reset state
+
+### 3. Seleksi Tabel Tidak Dibersihkan
+- **Masalah:** Setelah reset form, baris tabel masih terseleksi, menyebabkan confusion.
+- **Solusi:** Semua fungsi reset sekarang memanggil `clearSelection()` pada tabel terkait
+
+---
+
+## 🎨 Palet Warna Keseluruhan
+
+Seluruh aplikasi kini menggunakan **tema terang/bright** yang konsisten:
+
+| Nama | Hex | Kegunaan |
+|------|-----|----------|
+| White | `#FFFFFF` | Background utama, card |
+| Slate 50 | `#F8FAFC` | Background panel |
+| Slate 100 | `#F1F5F9` | Header tabel |
+| Blue 50 | `#EFF6FF` | Baris zebra, chip user |
+| Blue 100 | `#DBEAFE` | Selection highlight |
+| Blue 500 | `#3B82F6` | Aksen utama, tombol |
+| Blue 900 | `#1E3A8A` | Teks judul header |
+| Red 50 | `#FEF2F2` | Background tombol logout |
+| Red 500 | `#DC2626` | Teks error, tombol hapus |
+
+---
+
+## 🏗️ Struktur File
+
+```
+src/main/java/id/team1/inventory/
+├── Inventory.java        ← Entry point (Nimbus L&F + anti-aliasing)
+├── LoginFrame.java       ← 🔄 Redesign total (split panel + ilustrasi)
+├── MainFrame.java        ← 🔄 Header putih, tabel terang, bug fixes
+├── AppUser.java           ← Model user (tidak berubah)
+├── Barang.java            ← Model barang (tidak berubah)
+├── Kategori.java          ← Model kategori (tidak berubah)
+├── Koneksi.java           ← Database connection (tidak berubah)
+└── Transaksi.java         ← Model transaksi (tidak berubah)
+
+src/main/resources/images/
+└── login_bg.png           ← 🆕 Ilustrasi warehouse untuk login
 ```
 
-Alternatif cek syntax Java yang dipakai saat perubahan ini dibuat:
+---
+
+## ⚙️ Look & Feel
+
+Aplikasi sekarang menggunakan **Nimbus Look & Feel** dengan kustomisasi warna:
+- Base: Biru (`#3B82F6`)
+- Background: Putih (`#FFFFFF`)
+- Selection: Biru muda (`#DBEAFE`)
+- Text: Slate gelap (`#1E293B`)
+- Anti-aliasing diaktifkan secara global
+
+---
+
+## 📋 Cara Menjalankan
 
 ```bash
-mkdir -p target/codex-classes
-javac -d target/codex-classes $(find src/main/java -name "*.java")
+# Compile & Run
+mvn clean compile exec:java
+
+# Atau build JAR
+mvn clean package
+java -jar target/java-inventory-1.0.jar
 ```
+
+### Default Login
+| Username | Password |
+|----------|----------|
+| `admin`  | `admin123` |
+
+---
+
+*© 2026 Team 1 — Inventory Management System*

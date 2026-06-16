@@ -10,137 +10,205 @@ package id.team1.inventory;
  */
 public class LoginFrame extends javax.swing.JFrame {
 
-    private static final java.awt.Color NAVY_950 = new java.awt.Color(8, 27, 58);
-    private static final java.awt.Color BLUE_800 = new java.awt.Color(30, 64, 175);
-    private static final java.awt.Color BLUE_700 = new java.awt.Color(29, 78, 216);
-    private static final java.awt.Color BLUE_200 = new java.awt.Color(191, 219, 254);
-    private static final java.awt.Color BLUE_100 = new java.awt.Color(219, 234, 254);
-    private static final java.awt.Color BLUE_50 = new java.awt.Color(239, 246, 255);
-    private static final java.awt.Color BACKGROUND_COLOR = BLUE_50;
-    private static final java.awt.Color SURFACE_COLOR = java.awt.Color.WHITE;
-    private static final java.awt.Color TEXT_COLOR = NAVY_950;
-    private static final java.awt.Color MUTED_TEXT_COLOR = new java.awt.Color(100, 116, 139);
-    private static final java.awt.Color BORDER_COLOR = BLUE_200;
-    private static final java.awt.Color PRIMARY_COLOR = BLUE_800;
-    private static final java.awt.Color DANGER_COLOR = new java.awt.Color(185, 28, 28);
+    // ── Premium Light Color Palette ──
+    private static final java.awt.Color WHITE = new java.awt.Color(255, 255, 255);
+    private static final java.awt.Color BG_SOFT = new java.awt.Color(248, 250, 252);
+    private static final java.awt.Color BRAND_BLUE = new java.awt.Color(59, 130, 246);
+    private static final java.awt.Color BRAND_DARK = new java.awt.Color(30, 58, 138);
+    private static final java.awt.Color BRAND_LIGHT = new java.awt.Color(219, 234, 254);
+    private static final java.awt.Color INPUT_BG = new java.awt.Color(249, 250, 251);
+    private static final java.awt.Color INPUT_BORDER = new java.awt.Color(209, 213, 219);
+    private static final java.awt.Color INPUT_FOCUS = new java.awt.Color(59, 130, 246);
+    private static final java.awt.Color TEXT_DARK = new java.awt.Color(17, 24, 39);
+    private static final java.awt.Color TEXT_MUTED = new java.awt.Color(107, 114, 128);
+    private static final java.awt.Color DANGER = new java.awt.Color(220, 38, 38);
+    private static final java.awt.Color ACCENT_HOVER = new java.awt.Color(37, 99, 235);
+
+    private java.awt.image.BufferedImage loginImage;
 
     /**
      * Creates new form LoginFrame
      */
     public LoginFrame() {
+        setUndecorated(false);
+        setResizable(false);
+        loadImage();
         initComponents();
         applyModernStyle();
     }
 
+    private void loadImage() {
+        try {
+            java.io.InputStream is = getClass().getResourceAsStream("/images/login_bg.png");
+            if (is != null) {
+                loginImage = javax.imageio.ImageIO.read(is);
+            }
+        } catch (Exception e) {
+            loginImage = null;
+        }
+    }
+
     private void applyModernStyle() {
-        setMinimumSize(new java.awt.Dimension(760, 520));
-        setPreferredSize(new java.awt.Dimension(820, 560));
-
-        rootPanel.setBackground(BACKGROUND_COLOR);
-        headerPanel.setBackground(NAVY_950);
-        headerPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(18, 24, 18, 24));
-        titlePanel.setOpaque(false);
-        infoPanel.setOpaque(false);
-        contentPanel.setBackground(BACKGROUND_COLOR);
-        contentPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(32, 32, 32, 32));
-        cardPanel.setBackground(SURFACE_COLOR);
-        cardPanel.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                new javax.swing.border.LineBorder(BORDER_COLOR, 1, true),
-                javax.swing.BorderFactory.createEmptyBorder(28, 30, 28, 30)
-        ));
-        footerPanel.setBackground(SURFACE_COLOR);
-        footerPanel.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, BORDER_COLOR),
-                javax.swing.BorderFactory.createEmptyBorder(10, 24, 10, 24)
-        ));
-
-        lblHeaderTitle.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 22));
-        lblHeaderTitle.setForeground(java.awt.Color.WHITE);
-        lblHeaderSubtitle.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12));
-        lblHeaderSubtitle.setForeground(BLUE_100);
-        styleInfoChip(lblHeaderChip);
-
-        lblLoginTitle.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 22));
-        lblLoginTitle.setForeground(TEXT_COLOR);
-        lblLoginSubtitle.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
-        lblLoginSubtitle.setForeground(MUTED_TEXT_COLOR);
-        styleLabel(lblUsername);
-        styleLabel(lblPassword);
-        styleInput(txtUsername);
-        styleInput(txtPassword);
-        styleCheckBox(chkShowPassword);
-        styleButton(btnLogin);
-
-        lblError.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
-        lblError.setForeground(DANGER_COLOR);
-        lblFooter.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
-        lblFooter.setForeground(MUTED_TEXT_COLOR);
-
+        setMinimumSize(new java.awt.Dimension(900, 560));
+        setPreferredSize(new java.awt.Dimension(900, 560));
+        getContentPane().setBackground(WHITE);
         pack();
         setLocationRelativeTo(null);
     }
 
-    private void styleInfoChip(javax.swing.JLabel label) {
-        label.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
-        label.setForeground(NAVY_950);
-        label.setBackground(BLUE_50);
-        label.setOpaque(true);
-        label.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                new javax.swing.border.LineBorder(BLUE_200, 1, true),
-                javax.swing.BorderFactory.createEmptyBorder(6, 10, 6, 10)
-        ));
-    }
+    // ── Gradient Button ──
+    private static class GradientButton extends javax.swing.JButton {
+        private boolean hovered = false;
+        private float animProgress = 0f;
 
-    private void styleLabel(javax.swing.JLabel label) {
-        label.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
-        label.setForeground(TEXT_COLOR);
-    }
+        public GradientButton(String text) {
+            super(text);
+            setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 15));
+            setForeground(WHITE);
+            setFocusPainted(false);
+            setBorderPainted(false);
+            setContentAreaFilled(false);
+            setOpaque(false);
+            setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            setBorder(javax.swing.BorderFactory.createEmptyBorder(15, 24, 15, 24));
+            addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override public void mouseEntered(java.awt.event.MouseEvent e) { hovered = true; repaint(); }
+                @Override public void mouseExited(java.awt.event.MouseEvent e) { hovered = false; repaint(); }
+                @Override public void mousePressed(java.awt.event.MouseEvent e) { animProgress = 1f; repaint(); }
+                @Override public void mouseReleased(java.awt.event.MouseEvent e) { animProgress = 0f; repaint(); }
+            });
+        }
 
-    private void styleInput(javax.swing.JTextField field) {
-        field.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
-        field.setForeground(TEXT_COLOR);
-        field.setBackground(SURFACE_COLOR);
-        field.setCaretColor(PRIMARY_COLOR);
-        applyInputBorder(field, BORDER_COLOR);
-        field.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                applyInputBorder(field, BLUE_700);
+        @Override
+        protected void paintComponent(java.awt.Graphics g) {
+            java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+            g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+            java.awt.Color start = hovered ? ACCENT_HOVER : BRAND_BLUE;
+            java.awt.Color end = hovered ? new java.awt.Color(29, 78, 216) : new java.awt.Color(99, 102, 241);
+            java.awt.GradientPaint gp = new java.awt.GradientPaint(0, 0, start, getWidth(), getHeight(), end);
+            g2.setPaint(gp);
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+
+            // Subtle shadow effect
+            if (!hovered) {
+                g2.setColor(new java.awt.Color(59, 130, 246, 30));
+                g2.fillRoundRect(2, 4, getWidth() - 4, getHeight() - 2, 14, 14);
             }
 
-            @Override
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                applyInputBorder(field, BORDER_COLOR);
+            g2.dispose();
+            super.paintComponent(g);
+        }
+    }
+
+    // ── Modern rounded text field ──
+    private static class ModernTextField extends javax.swing.JTextField {
+        private boolean focused = false;
+        private final String placeholder;
+
+        public ModernTextField(String placeholder) {
+            this.placeholder = placeholder;
+            setOpaque(false);
+            setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+            setForeground(TEXT_DARK);
+            setCaretColor(INPUT_FOCUS);
+            setBorder(javax.swing.BorderFactory.createEmptyBorder(14, 16, 14, 16));
+            addFocusListener(new java.awt.event.FocusAdapter() {
+                @Override public void focusGained(java.awt.event.FocusEvent e) { focused = true; repaint(); }
+                @Override public void focusLost(java.awt.event.FocusEvent e) { focused = false; repaint(); }
+            });
+        }
+
+        @Override
+        protected void paintComponent(java.awt.Graphics g) {
+            java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+            g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // Background
+            g2.setColor(focused ? WHITE : INPUT_BG);
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
+
+            // Border with shadow when focused
+            if (focused) {
+                g2.setColor(new java.awt.Color(59, 130, 246, 25));
+                g2.setStroke(new java.awt.BasicStroke(4f));
+                g2.drawRoundRect(-1, -1, getWidth() + 1, getHeight() + 1, 14, 14);
+                g2.setColor(INPUT_FOCUS);
+                g2.setStroke(new java.awt.BasicStroke(2f));
+            } else {
+                g2.setColor(INPUT_BORDER);
+                g2.setStroke(new java.awt.BasicStroke(1f));
             }
-        });
+            g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 12, 12);
+            g2.dispose();
+
+            super.paintComponent(g);
+
+            // Placeholder text
+            if (getText().isEmpty() && !focused) {
+                java.awt.Graphics2D g3 = (java.awt.Graphics2D) g.create();
+                g3.setRenderingHint(java.awt.RenderingHints.KEY_TEXT_ANTIALIASING, java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+                g3.setColor(new java.awt.Color(156, 163, 175));
+                g3.setFont(getFont());
+                java.awt.FontMetrics fm = g3.getFontMetrics();
+                g3.drawString(placeholder, 16, (getHeight() + fm.getAscent() - fm.getDescent()) / 2);
+                g3.dispose();
+            }
+        }
     }
 
-    private void applyInputBorder(javax.swing.JTextField field, java.awt.Color color) {
-        field.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                new javax.swing.border.LineBorder(color, 1, true),
-                javax.swing.BorderFactory.createEmptyBorder(8, 10, 8, 10)
-        ));
-    }
+    // ── Modern rounded password field ──
+    private static class ModernPasswordField extends javax.swing.JPasswordField {
+        private boolean focused = false;
+        private final String placeholder;
 
-    private void styleCheckBox(javax.swing.JCheckBox checkBox) {
-        checkBox.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12));
-        checkBox.setForeground(TEXT_COLOR);
-        checkBox.setBackground(SURFACE_COLOR);
-        checkBox.setFocusPainted(false);
-    }
+        public ModernPasswordField(String placeholder) {
+            this.placeholder = placeholder;
+            setOpaque(false);
+            setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+            setForeground(TEXT_DARK);
+            setCaretColor(INPUT_FOCUS);
+            setBorder(javax.swing.BorderFactory.createEmptyBorder(14, 16, 14, 16));
+            addFocusListener(new java.awt.event.FocusAdapter() {
+                @Override public void focusGained(java.awt.event.FocusEvent e) { focused = true; repaint(); }
+                @Override public void focusLost(java.awt.event.FocusEvent e) { focused = false; repaint(); }
+            });
+        }
 
-    private void styleButton(javax.swing.JButton button) {
-        button.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
-        button.setForeground(java.awt.Color.WHITE);
-        button.setBackground(PRIMARY_COLOR);
-        button.setFocusPainted(false);
-        button.setContentAreaFilled(true);
-        button.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        button.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                new javax.swing.border.LineBorder(PRIMARY_COLOR.darker(), 1, true),
-                javax.swing.BorderFactory.createEmptyBorder(10, 14, 10, 14)
-        ));
-        button.setOpaque(true);
+        @Override
+        protected void paintComponent(java.awt.Graphics g) {
+            java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+            g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+            g2.setColor(focused ? WHITE : INPUT_BG);
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
+
+            if (focused) {
+                g2.setColor(new java.awt.Color(59, 130, 246, 25));
+                g2.setStroke(new java.awt.BasicStroke(4f));
+                g2.drawRoundRect(-1, -1, getWidth() + 1, getHeight() + 1, 14, 14);
+                g2.setColor(INPUT_FOCUS);
+                g2.setStroke(new java.awt.BasicStroke(2f));
+            } else {
+                g2.setColor(INPUT_BORDER);
+                g2.setStroke(new java.awt.BasicStroke(1f));
+            }
+            g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 12, 12);
+            g2.dispose();
+
+            super.paintComponent(g);
+
+            // Placeholder text
+            if (getPassword().length == 0 && !focused) {
+                java.awt.Graphics2D g3 = (java.awt.Graphics2D) g.create();
+                g3.setRenderingHint(java.awt.RenderingHints.KEY_TEXT_ANTIALIASING, java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+                g3.setColor(new java.awt.Color(156, 163, 175));
+                g3.setFont(getFont());
+                java.awt.FontMetrics fm = g3.getFontMetrics();
+                g3.drawString(placeholder, 16, (getHeight() + fm.getAscent() - fm.getDescent()) / 2);
+                g3.dispose();
+            }
+        }
     }
 
     /**
@@ -154,151 +222,228 @@ public class LoginFrame extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         rootPanel = new javax.swing.JPanel();
-        headerPanel = new javax.swing.JPanel();
-        titlePanel = new javax.swing.JPanel();
-        lblHeaderTitle = new javax.swing.JLabel();
-        lblHeaderSubtitle = new javax.swing.JLabel();
-        infoPanel = new javax.swing.JPanel();
-        lblHeaderChip = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
         cardPanel = new javax.swing.JPanel();
         lblLoginTitle = new javax.swing.JLabel();
         lblLoginSubtitle = new javax.swing.JLabel();
         lblUsername = new javax.swing.JLabel();
-        txtUsername = new javax.swing.JTextField();
+        txtUsername = new ModernTextField("Masukkan username");
         lblPassword = new javax.swing.JLabel();
-        txtPassword = new javax.swing.JPasswordField();
+        txtPassword = new ModernPasswordField("Masukkan password");
         chkShowPassword = new javax.swing.JCheckBox();
         lblError = new javax.swing.JLabel();
-        btnLogin = new javax.swing.JButton();
+        btnLogin = new GradientButton("Sign In");
         footerPanel = new javax.swing.JPanel();
         lblFooter = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Login - Sistem Inventory");
+        setTitle("Login - Inventory System");
 
+        // ── SPLIT LAYOUT: Image left + Form right ──
         rootPanel.setLayout(new java.awt.BorderLayout());
+        rootPanel.setBackground(WHITE);
 
-        headerPanel.setLayout(new java.awt.BorderLayout(16, 0));
+        // ── LEFT PANEL: Illustration ──
+        javax.swing.JPanel leftPanel = new javax.swing.JPanel() {
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                super.paintComponent(g);
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-        titlePanel.setLayout(new javax.swing.BoxLayout(titlePanel, javax.swing.BoxLayout.Y_AXIS));
+                // Soft gradient background
+                java.awt.GradientPaint bgGrad = new java.awt.GradientPaint(
+                    0, 0, new java.awt.Color(239, 246, 255),
+                    0, getHeight(), new java.awt.Color(219, 234, 254)
+                );
+                g2.setPaint(bgGrad);
+                g2.fillRect(0, 0, getWidth(), getHeight());
 
-        lblHeaderTitle.setText("Sistem Inventory Barang");
-        titlePanel.add(lblHeaderTitle);
+                // Draw subtle decorative circles
+                g2.setColor(new java.awt.Color(59, 130, 246, 15));
+                g2.fillOval(-40, -40, 200, 200);
+                g2.fillOval(getWidth() - 100, getHeight() - 150, 200, 200);
+                g2.setColor(new java.awt.Color(99, 102, 241, 10));
+                g2.fillOval(getWidth() / 2 - 80, getHeight() - 100, 160, 160);
 
-        lblHeaderSubtitle.setText("Dashboard Operasional");
-        titlePanel.add(lblHeaderSubtitle);
+                // Draw image centered
+                if (loginImage != null) {
+                    int imgSize = Math.min(getWidth() - 60, getHeight() - 160);
+                    imgSize = Math.min(imgSize, 320);
+                    int imgX = (getWidth() - imgSize) / 2;
+                    int imgY = (getHeight() - imgSize) / 2 - 20;
+                    g2.drawImage(loginImage, imgX, imgY, imgSize, imgSize, null);
+                }
 
-        headerPanel.add(titlePanel, java.awt.BorderLayout.WEST);
+                // Branding text at bottom
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_TEXT_ANTIALIASING, java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+                g2.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 18));
+                g2.setColor(BRAND_DARK);
+                String brand = "Inventory System";
+                java.awt.FontMetrics fm = g2.getFontMetrics();
+                int textX = (getWidth() - fm.stringWidth(brand)) / 2;
+                int textY = getHeight() - 70;
+                g2.drawString(brand, textX, textY);
 
-        infoPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 8, 4));
+                g2.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12));
+                g2.setColor(TEXT_MUTED);
+                String sub = "Kelola stok dengan mudah";
+                fm = g2.getFontMetrics();
+                g2.drawString(sub, (getWidth() - fm.stringWidth(sub)) / 2, textY + 22);
 
-        lblHeaderChip.setText("Login");
-        infoPanel.add(lblHeaderChip);
+                g2.dispose();
+            }
+        };
+        leftPanel.setPreferredSize(new java.awt.Dimension(380, 560));
+        rootPanel.add(leftPanel, java.awt.BorderLayout.WEST);
 
-        headerPanel.add(infoPanel, java.awt.BorderLayout.EAST);
-
-        rootPanel.add(headerPanel, java.awt.BorderLayout.NORTH);
+        // ── RIGHT PANEL: Login Form ──
+        javax.swing.JPanel rightPanel = new javax.swing.JPanel(new java.awt.BorderLayout());
+        rightPanel.setBackground(WHITE);
 
         contentPanel.setLayout(new java.awt.GridBagLayout());
+        contentPanel.setBackground(WHITE);
 
         cardPanel.setLayout(new java.awt.GridBagLayout());
+        cardPanel.setBackground(WHITE);
+        cardPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 48, 20, 48));
+        cardPanel.setOpaque(true);
 
-        lblLoginTitle.setText("Login Inventory");
+        // Logo icon (emoji-based)
+        javax.swing.JLabel lblIcon = new javax.swing.JLabel("📦");
+        lblIcon.setFont(new java.awt.Font("Segoe UI Emoji", java.awt.Font.PLAIN, 36));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        cardPanel.add(lblLoginTitle, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
+        cardPanel.add(lblIcon, gridBagConstraints);
 
-        lblLoginSubtitle.setText("Masuk dengan akun yang tersimpan di database");
+        // Title
+        lblLoginTitle.setText("Welcome back");
+        lblLoginTitle.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 28));
+        lblLoginTitle.setForeground(TEXT_DARK);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 0, 22, 0);
-        cardPanel.add(lblLoginSubtitle, gridBagConstraints);
+        cardPanel.add(lblLoginTitle, gridBagConstraints);
 
-        lblUsername.setText("Username");
+        lblLoginSubtitle.setText("Sign in to continue");
+        lblLoginSubtitle.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+        lblLoginSubtitle.setForeground(TEXT_MUTED);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 6, 0);
-        cardPanel.add(lblUsername, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 0, 36, 0);
+        cardPanel.add(lblLoginSubtitle, gridBagConstraints);
 
-        txtUsername.setPreferredSize(new java.awt.Dimension(340, 38));
-        txtUsername.setToolTipText("Masukkan username");
-        txtUsername.addActionListener(this::btnLoginActionPerformed);
+        // Username
+        lblUsername.setText("Username");
+        lblUsername.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
+        lblUsername.setForeground(TEXT_MUTED);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 14, 0);
-        cardPanel.add(txtUsername, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 6, 0);
+        cardPanel.add(lblUsername, gridBagConstraints);
 
-        lblPassword.setText("Password");
+        txtUsername.setPreferredSize(new java.awt.Dimension(320, 48));
+        txtUsername.addActionListener(this::btnLoginActionPerformed);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 6, 0);
-        cardPanel.add(lblPassword, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        cardPanel.add(txtUsername, gridBagConstraints);
 
-        txtPassword.setPreferredSize(new java.awt.Dimension(340, 38));
-        txtPassword.setToolTipText("Masukkan password");
-        txtPassword.addActionListener(this::btnLoginActionPerformed);
+        // Password
+        lblPassword.setText("Password");
+        lblPassword.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
+        lblPassword.setForeground(TEXT_MUTED);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
-        cardPanel.add(txtPassword, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 6, 0);
+        cardPanel.add(lblPassword, gridBagConstraints);
 
-        chkShowPassword.setText("Tampilkan password");
-        chkShowPassword.addActionListener(this::chkShowPasswordActionPerformed);
+        txtPassword.setPreferredSize(new java.awt.Dimension(320, 48));
+        txtPassword.addActionListener(this::btnLoginActionPerformed);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 12, 0);
-        cardPanel.add(chkShowPassword, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        cardPanel.add(txtPassword, gridBagConstraints);
 
-        lblError.setText(" ");
+        // Show password checkbox
+        chkShowPassword.setText("Show password");
+        chkShowPassword.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12));
+        chkShowPassword.setForeground(TEXT_MUTED);
+        chkShowPassword.setBackground(WHITE);
+        chkShowPassword.setFocusPainted(false);
+        chkShowPassword.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkShowPassword.addActionListener(this::chkShowPasswordActionPerformed);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 12, 0);
-        cardPanel.add(lblError, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 6, 0);
+        cardPanel.add(chkShowPassword, gridBagConstraints);
 
-        btnLogin.setText("Masuk");
-        btnLogin.addActionListener(this::btnLoginActionPerformed);
+        // Error label
+        lblError.setText(" ");
+        lblError.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
+        lblError.setForeground(DANGER);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
+        cardPanel.add(lblError, gridBagConstraints);
+
+        // Login button
+        btnLogin.addActionListener(this::btnLoginActionPerformed);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         cardPanel.add(btnLogin, gridBagConstraints);
 
-        contentPanel.add(cardPanel, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        contentPanel.add(cardPanel, gridBagConstraints);
 
-        rootPanel.add(contentPanel, java.awt.BorderLayout.CENTER);
+        rightPanel.add(contentPanel, java.awt.BorderLayout.CENTER);
 
+        // Footer
         footerPanel.setLayout(new java.awt.BorderLayout());
+        footerPanel.setBackground(WHITE);
+        footerPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 24, 12, 24));
 
-        lblFooter.setText("Siap login");
-        footerPanel.add(lblFooter, java.awt.BorderLayout.WEST);
+        lblFooter.setText("© 2026 Team 1 — Inventory System");
+        lblFooter.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 11));
+        lblFooter.setForeground(new java.awt.Color(156, 163, 175));
+        lblFooter.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        footerPanel.add(lblFooter, java.awt.BorderLayout.CENTER);
 
-        rootPanel.add(footerPanel, java.awt.BorderLayout.SOUTH);
+        rightPanel.add(footerPanel, java.awt.BorderLayout.SOUTH);
+        rootPanel.add(rightPanel, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(rootPanel, java.awt.BorderLayout.CENTER);
 
@@ -354,19 +499,13 @@ public class LoginFrame extends javax.swing.JFrame {
     private javax.swing.JCheckBox chkShowPassword;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JPanel footerPanel;
-    private javax.swing.JPanel headerPanel;
-    private javax.swing.JPanel infoPanel;
     private javax.swing.JLabel lblError;
     private javax.swing.JLabel lblFooter;
-    private javax.swing.JLabel lblHeaderChip;
-    private javax.swing.JLabel lblHeaderSubtitle;
-    private javax.swing.JLabel lblHeaderTitle;
     private javax.swing.JLabel lblLoginSubtitle;
     private javax.swing.JLabel lblLoginTitle;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JPanel rootPanel;
-    private javax.swing.JPanel titlePanel;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
